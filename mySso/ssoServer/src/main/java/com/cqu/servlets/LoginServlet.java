@@ -65,19 +65,25 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("id");
+    	String id = request.getParameter("id");
         String pwd = request.getParameter("pwd");
         String sessionID = request.getParameter("sessionID");
         String backUrl = request.getParameter("backUrl");
-
-
+        String vericode=request.getParameter("vericode");
+        String code=(String)request.getSession().getAttribute("code");
         System.out.println("获取到登录信息, id:"+id+", password:"+pwd);
         System.out.println("sessionID:"+sessionID+", backUrl:"+backUrl);
-        
+        System.out.println("code: "+code+", veriCode:"+vericode);
         User user = DB.findUser(id, pwd);
-
+        
+        if(code == null || !code.equalsIgnoreCase(vericode)) {
+            System.out.println("验证码错误！");
+            request.setAttribute("backUrl",backUrl);
+            request.setAttribute("sessionID", sessionID);
+        	request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request,response);
+            return;
+        }
         if(user==null) {
-            request.setAttribute("remind", "账户密码错误！");
             System.out.println("密码错误！");
             request.setAttribute("backUrl",backUrl);
             request.setAttribute("sessionID", sessionID);

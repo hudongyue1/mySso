@@ -73,11 +73,7 @@
 			<input type="text" name="sessionID" value="${sessionID}" style ="display:none">
 			
 		</form>
-		<div>
-		<%if(session.getAttribute("remind")=="error") {%>
-        	<p>账号密码或验证码错误</p>
-		<% }%>
-		</div>
+		
 	</div>
 </body>
 <script type="text/javascript">
