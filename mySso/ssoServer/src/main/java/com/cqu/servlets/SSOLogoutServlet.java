@@ -36,7 +36,7 @@ public class SSOLogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession(false);//获取全局session
     	if(session == null) {
-    		System.out.println("没有登录账号，去到登录页面");
+    		System.out.println("没有已登录账号，去到登录页面");
     		request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request,response);
     		return;
     	}
@@ -63,7 +63,7 @@ public class SSOLogoutServlet extends HttpServlet {
 
 	        	  httpClient.execute(httpPost);
 
-            }
+	          }
         } catch (ParseException e) {
             System.err.println("解析错误");
             e.printStackTrace();

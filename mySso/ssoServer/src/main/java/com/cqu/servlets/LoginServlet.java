@@ -29,18 +29,19 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	System.out.println("到达cas登录中心");
+    	System.out.println("到达SSO登录中心");
         HttpSession session = request.getSession();
-        System.out.println("全局sessionID:"+session.getId());
-        
+
         String backUrl = (String)request.getParameter("backUrl");
         String sessionID = (String)request.getParameter("sessionID");
-        System.out.println("backUrl:"+backUrl+" sessionID:"+sessionID);
+        
+        System.out.println("全局sessionID: "+session.getId());
+        System.out.println("backUrl: "+backUrl+" 局部sessionID: "+sessionID);
         if(session != null) {//全局session不为空
         	String token = (String)session.getAttribute("token");
         	if(token != null) {
-        		System.out.println("cas中心,backUrl:"+backUrl);
-            	System.out.println("cas中心,token:"+token);
+        		System.out.println("SSO中心,backUrl:"+backUrl);
+            	System.out.println("SSO中心,token:"+token);
         		System.out.println("拥有全局session，但是没有局部session！");
         		System.out.println("backUrl"+backUrl+"token:"+token+"sessionID:"+sessionID);
 
@@ -49,7 +50,7 @@ public class LoginServlet extends HttpServlet {
             		return;
             	}
         		System.out.println("backUrl"+backUrl);
-                if(sessionID != null && backUrl != null && token != null) 
+                if(sessionID != null && backUrl != null && token != null && backUrl.length() != 0) 
                 	DB.addSessionStorage(backUrl, token, sessionID);
         		response.sendRedirect(backUrl+"/login?token="+token);
         		return;
@@ -95,7 +96,7 @@ public class LoginServlet extends HttpServlet {
         //存储sessionID
         
         System.out.println("sessionID:"+sessionID+"backUrl:"+backUrl);
-        if(sessionID != null && backUrl != null && token != null) 
+        if(sessionID != null && backUrl != null && token != null && backUrl.length() != 0) 
             DB.addSessionStorage(backUrl, token, sessionID);
 
         DB.addTokenStorage(user, token);

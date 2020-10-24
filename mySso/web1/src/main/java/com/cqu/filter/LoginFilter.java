@@ -31,7 +31,7 @@ import database.DB;
  * 登录拦截器
  * Created by Ziry on 2018/4/23.
  */
-@WebFilter("/login")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
 
     public void destroy() {
@@ -40,11 +40,15 @@ public class LoginFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         System.out.println("LoginFilter doFilter ...");
+       
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = (HttpSession) req.getSession(true);
         User user = (User) session.getAttribute("user");
+        
+        if(req.getRequestURI().endsWith("/logout"))
+        	chain.doFilter(request, response);
         if(user != null) {//存在局部session，且有已登录的用户
 
         	System.out.println("存在局部session，直接放行, ");
